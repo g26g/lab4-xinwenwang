@@ -15,14 +15,25 @@ Page({
     onLoad: function (options) {
 
     },
-    getMyInfo:function(e){
-        let info = e.detail.userInfo;
-        this.setData({
-            isLogin:true,
-            src:info.avatarUrl,
-            nickName:info.nickName
-        })
-        this.getMyFavorites();
+    getMyInfo: function()
+    {
+              var that = this;
+              wx.getUserProfile({
+                desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+                success: (res) => {
+                  console.log("获取用户信息成功", res);
+                  that.setData({
+                    isLogin:true,
+                    src: res.userInfo.avatarUrl,
+                    nickName: res.userInfo.nickName
+                  }) 
+        //获取新闻列表
+                  this.getMyFavorites()
+                 },
+                fail: res => {
+                  console.log("获取用户信息失败", res)
+                }
+              })
     },
     getMyFavorites:function(){
         let info = wx.getStorageInfoSync();
